@@ -53,6 +53,10 @@ class HomeController extends Controller
             $url->value = Input::get('url');
             $url->save();
         }
-        return view('loged.soap_settings');
+        $data = Settings::all();
+        foreach ($data as $item){
+            $settings[$item->name] = $item->value;
+        }
+        return view('loged.soap_settings',['settings'=>$settings]);
     }
 }
