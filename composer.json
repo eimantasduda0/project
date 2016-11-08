@@ -10,7 +10,7 @@
         "eimantasduda0/soap-connector": "dev-master",
         "barryvdh/laravel-debugbar": "^2.3",
         "laravelcollective/html": "5.2.*",
-        "barryvdh/laravel-ide-helper": "^2.2"
+        "laracasts/flash": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

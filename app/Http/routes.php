@@ -20,6 +20,7 @@ Route::auth();
 Route::get('/home', ['as'=>'index','uses'=>'HomeController@index']);
 
 Route::match(['get','post'],'/settings', ['as'=>'settings','uses'=>'HomeController@settings']);
+Route::match(['get','post'],'/settings/import', ['as'=>'import','uses'=>'HomeController@import']);
 Route::match(['get','post'],'/info/{id}', ['as'=>'itemInfo','uses'=>'ItemController@itemInfo']);
 Route::match(['get','post'],'/items', ['as'=>'itemInfo','uses'=>'ItemController@items']);
 Route::match(['get','post'],'/item/{id}',['as'=>'itemSettings','uses'=>'ItemController@itemSettings']);

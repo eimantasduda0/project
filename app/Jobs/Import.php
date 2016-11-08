@@ -38,24 +38,25 @@ class Import extends Job implements ShouldQueue
         $user = Settings::getOne('user');
         $password = Settings::getOne('pass');
         $url = Settings::getOne('url');
-//      $config = new SoapConfig('Eimantas','Eimantas123!','http://17946e8ea1.plentymarkets.net/plenty/api/soap/version115/?xml');
         $config = new SoapConfig($user,$password,$url);
         $connector = new SoapConnector($config);
         $client = $connector->_getInstance();
 
-        if ($this->page == 0){
-            $data = $client->GetItemsBase();
-        }else{
-            $data = $client->GetItemsBase(['Page'=>$this->page,'Lang'=>'de']);
-        }
+        // if ($this->page == 0){
+        //     $data = $client->GetItemsBase(['Page'=>$this->page,'Lang'=>'de','GetAttributeValueSets'=>true,'GetItemProperties'=>true]);
+        // }else{
+            $data = $client->GetItemsBase(['Page'=>$this->page,'Lang'=>'de','GetAttributeValueSets'=>true,'GetItemProperties'=>true]);
+        // }
 
 //      Log::debug(print_r($data,true));
 
         if (($data->Pages > 1 && $this->page == 0)){
-            for ($i=1;$i<=$data->Pages-1;$i++){
-                $job = (new Import($i))->delay(10);
+            for ($i=1;$i<=$data->Pages;$i++){
+                $job = (new Import($i))->delay(5);
                 dispatch($job);
+                Log::debug("Import page: ".$i);
             }
+                Log::debug("Import data: ". print_r($data,true));
         }
 
         if (count($data->ItemsBase) > 0) {

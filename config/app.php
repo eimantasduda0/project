@@ -158,7 +158,7 @@ return [
 
         Barryvdh\Debugbar\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Laracasts\Flash\FlashServiceProvider::class,
 
 
     ],

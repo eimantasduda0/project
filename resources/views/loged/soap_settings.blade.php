@@ -28,6 +28,39 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Data import</div>
+
+                    <div class="panel-body">
+                        <div><a class="btn btn-primary" onclick="Import('items');">Import items</a></div>
+                        <div style="margin-top: 10px;"><a class="btn btn-primary" onclick="Import('properties');">Import properties</a></div>
+                        <div style="margin-top: 10px;"><a class="btn btn-primary" onclick="Import('listings');">Import listings</a></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+<script type="text/javascript">
+    
+    function Import($what){
+        if ($what == 'items'){
+            $url = '?items=1'
+        }
+        if ($what == 'listings'){
+            $url = '?listings=1'
+        }
+        if ($what == 'properties'){
+            $url = '?properties=1'
+        }
+        $.post( "{!! route('import') !!}"+$url, function() {
+          swal("Started", "Import operation will be started in 10 seconds", "success");
+        });
+    }
+    
+</script>
 @endsection

@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Jobs\Import;
+use App\Jobs\ImportProperties;
 use App\Jobs\ImportListings;
 use App\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use TeamWorx\SoapConnector\SoapConfig;
+use TeamWorx\SoapConnector\SoapConnector;
 
 class HomeController extends Controller
 {
@@ -29,12 +32,25 @@ class HomeController extends Controller
     public function index()
     {
         if (Input::get('items') == 1) {
-            $job = (new Import())->delay(60 * 1);
+            $job = (new Import())->delay(5 * 1);
+            $this->dispatch($job);
+        }
+        if (Input::get('properties') == 1) {
+            $job = (new ImportProperties())->delay(5 * 1);
             $this->dispatch($job);
         }
         if (Input::get('listings') == 1){
             $job = (new ImportListings())->delay(10);
             $this->dispatch($job);
+            
+            $user = Settings::getOne('user');
+            $password = Settings::getOne('pass');
+            $url = Settings::getOne('url');
+            $config = new SoapConfig($user,$password,$url);
+            $connector = new SoapConnector($config);
+            $client = $connector->_getInstance();
+            $data = $client->GetPropertiesList();
+            dump($data);
         }
 
         return view('home');
@@ -42,6 +58,18 @@ class HomeController extends Controller
 
     public function settings()
     {
+        if (Input::get('items') == 1) {
+            $job = (new Import())->delay(10 * 1);
+            $this->dispatch($job);
+        }
+        if (Input::get('properties') == 1) {
+            $job = (new ImportProperties())->delay(10 * 1);
+            $this->dispatch($job);
+        }
+        if (Input::get('listings') == 1){
+            $job = (new ImportListings())->delay(10);
+            $this->dispatch($job);
+        }
         if (Input::has('user') && Input::has('pass') && Input::has('url')){
             $user = Settings::firstOrNew(['name'=>'user']);
             $user->value = Input::get('user');
@@ -59,4 +87,21 @@ class HomeController extends Controller
         }
         return view('loged.soap_settings',['settings'=>$settings]);
     }
+    
+    public function import(){
+        
+        if (Input::get('items') == 1) {
+            $job = (new Import())->delay(10 * 1);
+            $this->dispatch($job);
+        }
+        if (Input::get('properties') == 1) {
+            $job = (new ImportProperties())->delay(10 * 1);
+            $this->dispatch($job);
+        }
+        if (Input::get('listings') == 1){
+            $job = (new ImportListings())->delay(10);
+            $this->dispatch($job);
+        }
+    }
+    
 }

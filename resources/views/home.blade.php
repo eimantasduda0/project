@@ -9,6 +9,7 @@
 
                 <div class="panel-body">
                     You are logged in! <a href="{{ url('/home?items=1') }}">Get items</a>
+                    <div><a href="{{ url('/home?properties=1') }}">Get properties</a> </div>
                     <div><a href="{{ url('/home?listings=1') }}">Get listings</a> </div>
                 </div>
             </div>
