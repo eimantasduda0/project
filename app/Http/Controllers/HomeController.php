@@ -6,6 +6,8 @@ use App\Http\Requests;
 use App\Jobs\Import;
 use App\Jobs\ImportProperties;
 use App\Jobs\ImportListings;
+use App\Jobs\UpdateItems;
+use App\Properties;
 use App\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -39,18 +41,11 @@ class HomeController extends Controller
             $job = (new ImportProperties())->delay(5 * 1);
             $this->dispatch($job);
         }
-        if (Input::get('listings') == 1){
-            $job = (new ImportListings())->delay(10);
+        if (Input::get('listings') == 1) {
+//            $job = (new ImportListings())->delay(10);
+            $job = (new UpdateItems())->delay(10);
             $this->dispatch($job);
-            
-            $user = Settings::getOne('user');
-            $password = Settings::getOne('pass');
-            $url = Settings::getOne('url');
-            $config = new SoapConfig($user,$password,$url);
-            $connector = new SoapConnector($config);
-            $client = $connector->_getInstance();
-            $data = $client->GetPropertiesList();
-            dump($data);
+
         }
 
         return view('home');
@@ -66,11 +61,11 @@ class HomeController extends Controller
             $job = (new ImportProperties())->delay(10 * 1);
             $this->dispatch($job);
         }
-        if (Input::get('listings') == 1){
+        if (Input::get('listings') == 1) {
             $job = (new ImportListings())->delay(10);
             $this->dispatch($job);
         }
-        if (Input::has('user') && Input::has('pass') && Input::has('url')){
+        if (Input::has('user') && Input::has('pass') && Input::has('url')) {
             $user = Settings::firstOrNew(['name'=>'user']);
             $user->value = Input::get('user');
             $user->save();
@@ -81,11 +76,17 @@ class HomeController extends Controller
             $url->value = Input::get('url');
             $url->save();
         }
+        if (Input::has('amazon')){
+            $amazon = Settings::firstOrNew(['name'=>'amazon']);
+            $amazon->value = Input::get('amazon');
+            $amazon->save();
+        }
         $data = Settings::all();
         foreach ($data as $item){
             $settings[$item->name] = $item->value;
         }
-        return view('loged.soap_settings',['settings'=>$settings]);
+        $property = Properties::all();
+        return view('loged.soap_settings',['settings'=>$settings,'property'=>$property]);
     }
     
     public function import(){
@@ -98,7 +99,7 @@ class HomeController extends Controller
             $job = (new ImportProperties())->delay(10 * 1);
             $this->dispatch($job);
         }
-        if (Input::get('listings') == 1){
+        if (Input::get('listings') == 1) {
             $job = (new ImportListings())->delay(10);
             $this->dispatch($job);
         }

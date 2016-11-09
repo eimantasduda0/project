@@ -25,18 +25,6 @@ class ItemController extends Controller
         $this->middleware('auth');
     }
 
-    public static function importItems($connector)
-    {
-        $client = $connector->_getInstance();
-        $data = $client->GetItemsBase();
-        foreach ($data->ItemsBase->item as $item){
-            $new = new Item();
-            $new->name = $item->Texts->Name;
-            $new->system_id = $item->ItemID;
-            $new->object = serialize($item);
-            $new->saveOrFail();
-        }
-    }
 
     public function itemInfo($id){
         return view('loged.item_info');

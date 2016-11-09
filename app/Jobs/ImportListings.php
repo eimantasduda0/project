@@ -41,7 +41,9 @@ class ImportListings extends Job implements ShouldQueue
 
 //        $data = $client->GetListingsTemplates();
 //        $data = $client->GetListings(['CallItemsLimit'=>50,'Page'=>0,'GetListings'=>(object)['ListingStatus'=>'active']]);
-        $data = $client->GetListings(['GetListings'=>['ListingStatus'=>'active']]);
+        $content = (object)['GetListings'=>(object)['ListingStatus'=>'active'],'Page'=>0];
+        Log::debug(print_r($content,true));
+        $data = $client->GetListings($content);
 
         Log::debug(print_r($data,true));
 
